@@ -9,14 +9,14 @@ struct Node {
 
 struct Node* head = NULL;
 
-void push(int data){
+void push(int data){ // puts new node at the beginning of linked list
 	struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
 	temp->data = data;
 	temp->next = head;
 	head = temp;
 }
 	
-void freeLL(struct Node* curr) {
+void freeLL(struct Node* curr) { // frees allocated memory
 	if (curr == NULL) {
 		return;
 	}
@@ -24,7 +24,7 @@ void freeLL(struct Node* curr) {
     	free(curr);
 }
 
-void printLL(struct Node *head1){
+void printLL(struct Node *head1){  // print linked list, back to front
 	while (head1 != NULL) {
 		printf("%d\t", head1->data);
 		head1 = head1->next;
@@ -32,7 +32,7 @@ void printLL(struct Node *head1){
 	printf("\n");
 }
 
-int checkOrder(struct Node *headOne){
+int checkOrder(struct Node *headOne){ // check if linked list is in ascending order
 	struct Node* newptr = headOne;
 	struct Node* ptrnext = newptr->next;
 	
@@ -48,12 +48,11 @@ int checkOrder(struct Node *headOne){
 	return 1;
 }
 
-void sortLL(struct Node *head1){
+void sortLL(struct Node *head1){ // sorts into ascending order
 	struct Node* newHead = head1; 
 	struct Node* ptr = newHead;
 	struct Node* nextP = ptr->next;
 	struct Node* prev = NULL; 
-	
 	
 	int first = 1;
 	int inorder = checkOrder(head1);
@@ -64,7 +63,6 @@ void sortLL(struct Node *head1){
 				struct Node* temp = nextP->next;
 				nextP->next = ptr;
 				ptr->next = temp;
-				//
 				newHead = nextP;
 				prev = NULL;
 				ptr = newHead;
@@ -80,12 +78,12 @@ void sortLL(struct Node *head1){
 			}
 			first = 0;
 			printLL(newHead);
-		} else if (ptr->data < nextP->data){
+		} else if (ptr->data < nextP->data){   // can merge w the last else lol
 			if (first == 1){  // keep going, just move pointer
 				prev = ptr;
 				ptr = nextP;
-				nextP = ptr->next;     /////?????
-			} else { // go back to beginning I GUESS....
+				nextP = ptr->next;  
+			} else { // go back to beginning 
 				ptr = newHead;
 				nextP = ptr->next;
 				prev = NULL;
@@ -93,26 +91,23 @@ void sortLL(struct Node *head1){
 				first = 1;
 			}
 			
-		} else {  // theyre equivelant, just move pointer
+		} else {  // theyre equivilant, just move pointer
 			if (first == 1){  // keep going, just move pointer
 				prev = ptr;
 				ptr = nextP;
 				nextP = ptr->next;
-			} else { // go back to beginning I GUESS....
+			} else { // go back to beginning
 				ptr = newHead;
 				nextP = ptr->next;
 				prev = NULL;
-				//prev->next = ptr;
 				first = 1;
 			}
 		}
 		inorder = checkOrder(newHead);
-		//printf("\n inorder %d\n", inorder);
-		if (inorder == 0 && nextP == NULL){
+		if (inorder == 0 && nextP == NULL){ // if it is NOT in order AND were at the end, go back to beginning
 			ptr = newHead;
 			nextP = ptr->next;
 			prev = NULL;
-			//prev->next = ptr;
 			first = 1;
 		}
 	}
@@ -122,30 +117,24 @@ void sortLL(struct Node *head1){
 
 
 int main(int argc, char**argv){  
-	FILE *fp = fopen(argv[1], "r");
+	FILE *fp = fopen(argv[1], "r"); // takes in file input (list of numbers separated by tabs
 	
-	int oops;
+	// int oops;
+	// fscanf(fp, "%d\n", &oops);
+	// int num;
+	// num = oops;
 	
-	fscanf(fp, "%d\n", &oops);
-	
-	int num;
-	
-	num = oops;
-	
-	while(fscanf(fp, "%d\n", &num) != EOF){
+	while(fscanf(fp, "%d\n", &num) != EOF){ // prints elements as read in file
 		push(num);
 		printf("%d\t", num);
 	}
 	printf("\n");
-
-	printLL(head);  // reverse
 	
+	printLL(head);  
 	
 	sortLL(head);
 	
-	
 	freeLL(head);
-	
 	
 	fclose(fp);
 
